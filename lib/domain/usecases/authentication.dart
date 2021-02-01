@@ -1,6 +1,6 @@
 import 'package:meta/meta.dart';
 
-import '../domain/entities/account_entity.dart';
+import '../../domain/entities/entities.dart';
 
 abstract class Authentication {
   Future<AccountEntity> auth(AuthenticationParams params);
@@ -14,4 +14,6 @@ class AuthenticationParams{
     @required this.email,
     @required this.secret,
   });
+
+  Map toJson() => {'email': email, 'password': secret};
 }
