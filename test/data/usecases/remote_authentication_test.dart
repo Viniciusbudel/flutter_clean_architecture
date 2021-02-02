@@ -106,4 +106,5 @@ void main() {
 
     expect(future, throwsA(DomainError.unexpected));
   });
+
 }
