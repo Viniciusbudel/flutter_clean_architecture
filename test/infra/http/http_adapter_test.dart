@@ -125,8 +125,8 @@ void main() {
       expect(future, throwsA(HttpError.notFound));
     });
 
-    test('Should return InternalServerError if post returns 500', () async {
-      mockResponse(500);
+    test('Should return ServerError if post throws', () async {
+      mockError();
 
       final future = sut.request(url: url, method: 'post');
 
