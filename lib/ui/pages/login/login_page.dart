@@ -24,17 +24,22 @@ class LoginPage extends StatelessWidget {
               child: Form(
                   child: Column(
                 children: [
-                  TextFormField(
-                    decoration: InputDecoration(
-                      labelText: 'Email',
-                      icon: Icon(
-                        Icons.email,
-                        color: Theme.of(context).primaryColorLight,
-                      ),
-                    ),
-                    keyboardType: TextInputType.emailAddress,
-                    onChanged: presenter.validateEmail,
-                  ),
+                  StreamBuilder<String>(
+                      stream: presenter.emailErrorStream,
+                      builder: (context, snapshot) {
+                        return TextFormField(
+                          decoration: InputDecoration(
+                            labelText: 'Email',
+                            errorText: snapshot.data,
+                            icon: Icon(
+                              Icons.email,
+                              color: Theme.of(context).primaryColorLight,
+                            ),
+                          ),
+                          keyboardType: TextInputType.emailAddress,
+                          onChanged: presenter.validateEmail,
+                        );
+                      }),
                   Padding(
                     padding: EdgeInsets.only(top: 8.0, bottom: 32),
                     child: TextFormField(
@@ -47,7 +52,6 @@ class LoginPage extends StatelessWidget {
                       ),
                       obscureText: true,
                       onChanged: presenter.validatePassword,
-
                     ),
                   ),
                   RaisedButton(
