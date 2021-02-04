@@ -24,6 +24,7 @@ class LoginPage extends StatelessWidget {
                         Icons.email,
                         color: Theme.of(context).primaryColorLight,
                       ),
+
                     ),
                     keyboardType: TextInputType.emailAddress,
                   ),
