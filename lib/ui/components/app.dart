@@ -42,7 +42,7 @@ class App extends StatelessWidget {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20)))),
       debugShowCheckedModeBanner: false,
-      home: LoginPage(),
+      home: LoginPage(null),
     );
   }
 }
