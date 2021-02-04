@@ -14,8 +14,7 @@ class LoginPage extends StatelessWidget {
       body: Builder(
         builder: (context) {
           presenter.isLoadingStream.listen((isLoading) {
-
-            if (isLoading){
+            if (isLoading) {
               showDialog(
                   context: context,
                   barrierDismissible: false,
@@ -34,12 +33,24 @@ class LoginPage extends StatelessWidget {
                       )
                     ],
                   ));
-            }else{
-              if (Navigator.canPop(context)){
+            } else {
+              if (Navigator.canPop(context)) {
                 Navigator.of(context).pop();
               }
             }
           });
+
+          presenter.mainErrorStream.listen((error) {
+            if (error != null) {
+              Scaffold.of(context).showSnackBar(SnackBar(
+                  backgroundColor: Colors.red[900],
+                  content: Text(
+                    error,
+                    textAlign: TextAlign.center,
+                  )));
+            }
+          });
+
           return SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
