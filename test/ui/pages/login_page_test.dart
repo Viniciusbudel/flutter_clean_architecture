@@ -149,6 +149,7 @@ void main() {
             of: find.bySemanticsLabel('Senha'), matching: find.byType(Text)),
         findsOneWidget);
   });
+
   testWidgets('Should enable button if is form valid',
       (WidgetTester tester) async {
     await loadPage(tester);
@@ -158,5 +159,16 @@ void main() {
 
     final button = tester.widget<RaisedButton>(find.byType(RaisedButton));
     expect(button.onPressed, isNotNull);
+  });
+
+  testWidgets('Should disable button if is form is invalid',
+      (WidgetTester tester) async {
+    await loadPage(tester);
+
+    isFormValidController.add(false);
+    await tester.pump();
+
+    final button = tester.widget<RaisedButton>(find.byType(RaisedButton));
+    expect(button.onPressed, null);
   });
 }
