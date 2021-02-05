@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_clean_architecture/ui/components/spinner_dialog.dart';
 import 'package:flutter_clean_architecture/ui/pages/pages.dart';
 
 import '../../components/components.dart';
@@ -10,7 +11,6 @@ class LoginPage extends StatefulWidget {
 
   @override
   _LoginPageState createState() => _LoginPageState();
-
 }
 
 class _LoginPageState extends State<LoginPage> {
@@ -27,28 +27,9 @@ class _LoginPageState extends State<LoginPage> {
         builder: (context) {
           widget.presenter.isLoadingStream.listen((isLoading) {
             if (isLoading) {
-              showDialog(
-                  context: context,
-                  barrierDismissible: false,
-                  child: SimpleDialog(
-                    children: [
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          CircularProgressIndicator(),
-                          SizedBox(height: 10),
-                          Text(
-                            'Aguarde...',
-                            textAlign: TextAlign.center,
-                          )
-                        ],
-                      )
-                    ],
-                  ));
+              showLoading(context);
             } else {
-              if (Navigator.canPop(context)) {
-                Navigator.of(context).pop();
-              }
+              hideLoading(context);
             }
           });
 
