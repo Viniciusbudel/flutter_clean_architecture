@@ -36,7 +36,8 @@ main() {
   test('Should emit email error if validation fails', () {
     mockValidation(value: 'error');
 
-    expectLater(sut.emailErrorStream, emits('error'));
+    sut.emailErrorStream.listen(expectAsync1((error) => expect(error, 'error')));
+    sut.isFormValidStream.listen(expectAsync1((isValid) => expect(isValid, false)));
 
     sut.validateEmail(email);
   });
