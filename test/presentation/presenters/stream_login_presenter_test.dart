@@ -10,6 +10,7 @@ import 'package:flutter_clean_architecture/presentation/presenters/presenters.da
 import 'package:flutter_clean_architecture/presentation/protocols/protocols.dart';
 
 class ValidationSpy extends Mock implements Validation {}
+
 class AuthenticationSpy extends Mock implements Authentication {}
 
 main() {
@@ -30,18 +31,19 @@ main() {
   PostExpectation mockAutheticationCall() => when(authentication.auth(any));
 
   void mockAuthetication() {
-    mockAutheticationCall().thenAnswer((_) async => AccountEntity(faker.guid.guid()));
+    mockAutheticationCall()
+        .thenAnswer((_) async => AccountEntity(faker.guid.guid()));
   }
 
   void mockAutheticationError(DomainError error) {
     mockAutheticationCall().thenThrow(error);
   }
 
-
   setUp(() {
     validation = ValidationSpy();
     authentication = AuthenticationSpy();
-    sut = StreamLoginPresenter(validation: validation,authentication: authentication);
+    sut = StreamLoginPresenter(
+        validation: validation, authentication: authentication);
     email = faker.internet.email();
     password = faker.internet.password();
 
@@ -121,18 +123,19 @@ main() {
   test('Should call Authentication with correct values', () async {
     sut.validateEmail(email);
     sut.validatePassword(password);
-    
+
     await sut.auth();
-    
-    verify(authentication.auth(AuthenticationParams(email: email, secret: password)));
+
+    verify(authentication
+        .auth(AuthenticationParams(email: email, secret: password)));
   });
 
   test('Should emit correct events on Authentication success', () async {
     sut.validateEmail(email);
     sut.validatePassword(password);
 
-    expectLater(sut.isLoadingStream, emitsInOrder([true,false]));
-    
+    expectLater(sut.isLoadingStream, emitsInOrder([true, false]));
+
     await sut.auth();
   });
 
@@ -143,10 +146,12 @@ main() {
     sut.validatePassword(password);
 
     expectLater(sut.isLoadingStream, emits(false));
-    sut.mainErrorStream.listen(expectAsync1((error) => expect(error, 'Credenciais inválidas.')));
+    sut.mainErrorStream.listen(
+        expectAsync1((error) => expect(error, 'Credenciais inválidas.')));
 
     await sut.auth();
   });
+
   test('Should emit correct events on UnexpectedError', () async {
     mockAutheticationError(DomainError.unexpected);
 
@@ -154,8 +159,17 @@ main() {
     sut.validatePassword(password);
 
     expectLater(sut.isLoadingStream, emits(false));
-    sut.mainErrorStream.listen(expectAsync1((error) => expect(error, 'Algo errado aconteceu. Tente novamente em breve.')));
+    sut.mainErrorStream.listen(expectAsync1((error) =>
+        expect(error, 'Algo errado aconteceu. Tente novamente em breve.')));
 
     await sut.auth();
+  });
+
+  test('Should not emit after dispose', () async {
+    expectLater(sut.emailErrorStream, neverEmits(null));
+
+    sut.dispose();
+    sut.validateEmail(email);
+
   });
 }
