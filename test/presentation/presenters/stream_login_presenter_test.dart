@@ -41,4 +41,13 @@ main() {
 
     sut.validateEmail(email);
   });
+
+  test('Should emit null if validation succeeds', () {
+    mockValidation(value: 'error');
+
+    sut.emailErrorStream.listen(expectAsync1((error) => expect(error, null)));
+    sut.isFormValidStream.listen(expectAsync1((isValid) => expect(isValid, false)));
+
+    sut.validateEmail(email);
+  });
 }
