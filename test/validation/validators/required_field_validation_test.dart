@@ -13,7 +13,8 @@ RequiredFieldValidation(this.field);
 
   String validate(String value) {
 
-    return null;
+
+    return value.isEmpty ? 'Campo obrigatório' : null;
   }
 }
 
@@ -24,6 +25,15 @@ main() {
     final error = sut.validate('any_value');
 
     expect(error, null);
+
+  });
+
+  test('Should return error if value is Empty', (){
+    final sut = RequiredFieldValidation('any_field');
+
+    final error = sut.validate('');
+
+    expect(error, 'Campo obrigatório');
 
   });
 }
