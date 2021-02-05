@@ -79,5 +79,17 @@ main() {
     sut.validateEmail(email);
   });
 
+  test('Should emit form invalid if any field is invalid', () async{
+
+    sut.passwordErrorStream.listen(expectAsync1((error) => expect(error, null)));
+    sut.emailErrorStream.listen(expectAsync1((error) => expect(error, null)));
+
+    expectLater( sut.isFormValidStream, emitsInOrder([false,true]));
+
+    sut.validateEmail(email);
+    await Future.delayed(Duration.zero);
+    sut.validatePassword(password);
+  });
+
 
 }
