@@ -17,15 +17,24 @@ void main() {
   StreamController<bool> isFormValidController;
   StreamController<bool> isLoadingController;
 
-  Future<void> loadPage(WidgetTester tester) async {
-    presenter = LoginPresenterSpy();
+  void initStreams() {
     emailErrorController = StreamController<String>();
     passwordErrorController = StreamController<String>();
     mainErrorController = StreamController<String>();
 
     isFormValidController = StreamController<bool>();
     isLoadingController = StreamController<bool>();
+  }
 
+  void closeStreams() {
+    emailErrorController.close();
+    passwordErrorController.close();
+    mainErrorController.close();
+    isFormValidController.close();
+    isLoadingController.close();
+  }
+
+  void mockStreams() {
     when(presenter.emailErrorStream)
         .thenAnswer((_) => emailErrorController.stream);
 
@@ -40,17 +49,20 @@ void main() {
 
     when(presenter.isLoadingStream)
         .thenAnswer((_) => isLoadingController.stream);
+  }
+
+  Future<void> loadPage(WidgetTester tester) async {
+    presenter = LoginPresenterSpy();
+
+    initStreams();
+    mockStreams();
 
     final loginPage = MaterialApp(home: LoginPage(presenter));
     await tester.pumpWidget(loginPage);
   }
 
   tearDown(() async {
-    emailErrorController.close();
-    passwordErrorController.close();
-    mainErrorController.close();
-    isFormValidController.close();
-    isLoadingController.close();
+    closeStreams();
   });
 
   testWidgets('Should load with correct initial state',
@@ -223,20 +235,20 @@ void main() {
     expect(find.byType(CircularProgressIndicator), findsNothing);
   });
 
-  testWidgets('Should present error message if authentication fails', (WidgetTester tester) async {
+  testWidgets('Should present error message if authentication fails',
+      (WidgetTester tester) async {
     await loadPage(tester);
 
     mainErrorController.add('main error');
     await tester.pump();
 
-    
     expect(find.text('main error'), findsOneWidget);
   });
 
   testWidgets('Should close streams on dispose', (WidgetTester tester) async {
     await loadPage(tester);
 
-    addTearDown((){
+    addTearDown(() {
       verify(presenter.dispose()).called(1);
     });
   });
