@@ -6,7 +6,7 @@ import '../../components/components.dart';
 
 import 'components/components.dart';
 
-class LoginPage extends StatefulWidget {
+class LoginPage  extends StatefulWidget {
   final LoginPresenter presenter;
 
   LoginPage(this.presenter);
@@ -28,6 +28,7 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
       body: Builder(
         builder: (context) {
+
           widget.presenter.isLoadingStream.listen((isLoading) {
             if (isLoading) {
               showLoading(context);
