@@ -7,8 +7,8 @@ main() {
     final validations = makeLoginValidations();
 
     expect(validations, [
-      RequiredFieldValidation('email'),
       RequiredFieldValidation('password'),
+      RequiredFieldValidation('email'),
       EmailValidation('email'),
     ]);
   });
