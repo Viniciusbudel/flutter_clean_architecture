@@ -15,7 +15,8 @@ dependencies:
   http:
   provider:
   equatable:
-  get:
+  get: 3.4.2
+
 
 dev_dependencies:
   flutter_test:
