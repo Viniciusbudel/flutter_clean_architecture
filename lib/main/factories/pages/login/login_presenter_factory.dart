@@ -9,3 +9,9 @@ LoginPresenter makeLoginPresenter() {
       validation: makeLoginValidation(),
       authentication: makeRemoteAuthentication());
 }
+
+LoginPresenter makeGetxLoginPresenter() {
+  return StreamLoginPresenter(
+      validation: makeLoginValidation(),
+      authentication: makeRemoteAuthentication());
+}
